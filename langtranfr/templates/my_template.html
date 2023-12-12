@@ -1,0 +1,42 @@
+<!-- myapp/templates/myapp/my_template.html -->
+
+{% load static %}
+{% load i18n %}
+
+<html>
+<head>
+    <title>{% block title %}My Page{% endblock %}</title>
+
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        // Function to handle language change
+        function changeLanguage() {
+            var selectedLanguage = $('#languageSelect').val();
+
+            // AJAX request to change language
+            $.ajax({
+                url: '/change-language/',  // Update with your URL for changing language
+                type: 'POST',
+                data: { language: selectedLanguage },
+                success: function () {
+                    // Reload the page after changing language
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <label for="languageSelect">{% trans "Select Language:" %}</label>
+    <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>{% trans "English" %}</option>
+        <option value="hi" {% if request.LANGUAGE_CODE == 'hi' %}selected{% endif %}>{% trans "हिन्दी (Hindi)" %}</option>
+        <option value="mr" {% if request.LANGUAGE_CODE == 'mr' %}selected{% endif %}>{% trans "मराठी (Marathi)" %}</option>
+    </select>
+
+    <h1>{% block content %}{% trans "Hello, this is some content." %}{% endblock %}</h1>
+</body>
+</html>
